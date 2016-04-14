@@ -48,4 +48,4 @@
       tags:
         - brew
 
-
+    - include: intellijConfig.yml

@@ -1,0 +1,4 @@
+---
+- name: Configure intellij config
+  shell: echo "rawr"
+
