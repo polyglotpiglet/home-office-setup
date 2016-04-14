@@ -1,0 +1,51 @@
+---
+- hosts: dev
+  remote_user: alexbate
+  vars:
+    - home_dir: /Users/alexbate/
+    - applications: # these will be installed with brew cask idempotently
+       - firefox
+       - iterm2
+       - intellij-idea-ce
+       - java
+
+  tasks:
+   # - name: install brew cask
+   #   command: brew install caskroom/cask/brew-cask
+
+    - name: Enable installing specific versions of casks (eg for intellij-idea-ce rather than intellij-idea)
+      shell: brew tap caskroom/versions
+
+    - name: Check for installed apps(casks)
+      shell: brew cask list | grep {{ item }}
+      register: installed_applications
+      with_items: applications
+      ignore_errors: true
+
+    - name: Install apps with brew-cask   
+      shell: brew cask install {{ item }}
+      with_items: applications
+      when: item not in installed_applications.results|map(attribute='stdout')
+
+    - name: install brew packages
+      homebrew: update_homebrew=yes name={{ item }}
+      with_items:
+        - vcsh
+        - mr
+        - htop
+        - wget
+        - scala
+        - sbt
+        - tig
+        - python
+        - tmux
+        - zsh
+        - zsh-completions
+        - tree
+        - watch
+        - redis 
+        - couchdb
+      tags:
+        - brew
+
+
