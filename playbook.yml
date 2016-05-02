@@ -8,6 +8,7 @@
        - iterm2
        - intellij-idea-ce
        - java
+       - dockertoolbox
 
   tasks:
    # - name: install brew cask
