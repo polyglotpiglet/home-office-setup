@@ -9,6 +9,7 @@
        - intellij-idea-ce
        - java
        - dockertoolbox
+       - visualvm
 
   tasks:
    # - name: install brew cask
