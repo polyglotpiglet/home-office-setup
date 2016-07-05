@@ -1,6 +1,5 @@
 ---
 - hosts: dev
-  remote_user: alexbate
   vars:
     - home_dir: /Users/alexbate/
     - applications: # these will be installed with brew cask idempotently
@@ -9,24 +8,24 @@
        - intellij-idea-ce
        - java
        - dockertoolbox
-       - visualvm
+       - rdm # redis desktop manager 
+       - squirrel
+       - haskell-platform
+       - spectacle
 
   tasks:
-   # - name: install brew cask
-   #   command: brew install caskroom/cask/brew-cask
-
     - name: Enable installing specific versions of casks (eg for intellij-idea-ce rather than intellij-idea)
       shell: brew tap caskroom/versions
 
     - name: Check for installed apps(casks)
       shell: brew cask list | grep {{ item }}
       register: installed_applications
-      with_items: applications
+      with_items: "{{ applications }}"
       ignore_errors: true
 
     - name: Install apps with brew-cask   
       shell: brew cask install {{ item }}
-      with_items: applications
+      with_items: "{{ applications }}"
       when: item not in installed_applications.results|map(attribute='stdout')
 
     - name: install brew packages
@@ -36,6 +35,7 @@
         - nvm
         - vcsh
         - mr
+        - maven
         - htop
         - wget
         - scala
@@ -52,4 +52,17 @@
       tags:
         - brew
 
-    - include: intellijConfig.yml
+    - name: configure intellij
+      tags: 
+        - intellij
+      shell: brew cask info intellij-idea-ce | sed -n 4p | cut -d ' ' -f 1
+      register: intellij_idea_ce_dir
+    - debug: msg="{{ intellij_idea_ce_dir.stdout }}"
+      tags: 
+        - intellij
+      #register: intellij-idea-ce-homedir
+#      tags:
+#        - intellij
+#    - debug: 
+#        var: intellij-idea-ce-homedir
+      #copy: src=ideac dest=
