@@ -3,15 +3,12 @@
   vars:
     - home_dir: /Users/alexbate/
     - applications: # these will be installed with brew cask idempotently
-       - firefox
        - iterm2
        - intellij-idea-ce
        - java
-       - dockertoolbox
-       - rdm # redis desktop manager 
-       - squirrel
        - haskell-platform
        - spectacle
+       - telegram
 
   tasks:
     - name: Enable installing specific versions of casks (eg for intellij-idea-ce rather than intellij-idea)
@@ -47,8 +44,8 @@
         - zsh-completions
         - tree
         - watch
-        - redis 
         - couchdb
+        - postgresql
       tags:
         - brew
 
