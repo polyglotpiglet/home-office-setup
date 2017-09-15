@@ -51,22 +51,15 @@
 
       ######################### vundle ####################################
 
-    - name: check if vundle repo has been cloned
+    - name: check if vundle repo has been cloned (this step isnt needed but i'm keeping it here for reference)
       stat: 
         path: ~/.vim/bundle/Vundle.vim
       register: vundle_exists 
-
-    - name: print response
-      debug:
-        msg: "Response code from check to see if vundle has been installed: {{ vundle_exists.stat.exists }} "
 
     - name: checkout vundle
       git: 
         repo: git@github.com:VundleVim/Vundle.vim.git
         dest: ~/.vim/bundle/Vundle.vim
-
-
-#      git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
       ######################### mr ####################################
 
