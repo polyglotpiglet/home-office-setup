@@ -81,7 +81,16 @@
       command: chdir=~ mr update
 
       ######################### scm_breeze ####################################
-    #- name: install scm_breeze
-      #command: git clone git://github.com/scmbreeze/scm_breeze.git ~/.scm_breeze
-      #command: ~/.scm_breeze/install.sh
-      #command: source ~/.bashrc
+
+    - name: check if scm_breeze repo has been cloned
+      stat:
+        path: ~/.scm_breeze
+      register: scm_breeze_exists
+
+    - name: checkout scm_breeze
+      git: 
+        repo: git://github.com/scmbreeze/scm_breeze.git
+        dest: ~/.scm_breeze
+
+    - name: insall scm_breeze
+      command: ~/.scm_breeze/install.sh && source ~/.bashrc
