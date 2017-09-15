@@ -49,17 +49,46 @@
       tags:
         - brew
 
-    - name: configure intellij
-      tags: 
-        - intellij
-      shell: brew cask info intellij-idea-ce | sed -n 4p | cut -d ' ' -f 1
-      register: intellij_idea_ce_dir
-    - debug: msg="{{ intellij_idea_ce_dir.stdout }}"
-      tags: 
-        - intellij
-      #register: intellij-idea-ce-homedir
-#      tags:
-#        - intellij
-#    - debug: 
-#        var: intellij-idea-ce-homedir
-      #copy: src=ideac dest=
+      ######################### vundle ####################################
+
+    - name: check if vundle repo has been cloned
+      stat: 
+        path: ~/.vim/bundle/Vundle.vim
+      register: vundle_exists 
+
+    - name: print response
+      debug:
+        msg: "Response code from check to see if vundle has been installed: {{ vundle_exists.stat.exists }} "
+
+    - name: checkout vundle
+      git: 
+        repo: git@github.com:VundleVim/Vundle.vim.git
+        dest: ~/.vim/bundle/Vundle.vim
+
+
+#      git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+      ######################### mr ####################################
+
+    - name: check if mr repo has been cloned
+      command: cd ~
+      command: vcsh mr rev-parse --verify master
+      register: master
+      failed_when: master.rc == 2
+
+    - name: print response
+      debug:
+        msg: "Response code from check to see if mr exists in vcsh: {{ master.rc }} "
+
+    - name: Clone mr with vcsh from polyglotpiglet
+      command: vcsh clone 'git@github-personal:polyglotpiglet/mr.git' 'mr'
+      when: master.rc == 1 
+
+    - name: mr update
+      command: chdir=~ mr update
+
+      ######################### scm_breeze ####################################
+    #- name: install scm_breeze
+      #command: git clone git://github.com/scmbreeze/scm_breeze.git ~/.scm_breeze
+      #command: ~/.scm_breeze/install.sh
+      #command: source ~/.bashrc
