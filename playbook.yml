@@ -22,28 +22,9 @@
       when: item not in installed_applications.results|map(attribute='stdout')
 
     - name: install brew packages
-      homebrew: update_homebrew=yes name={{ item }}
-      with_items:
-        - npm
-        - nvm
-        - vcsh
-        - mr
-        - maven
-        - htop
-        - wget
-        - scala
-        - sbt
-        - tig
-        - python
-        - tmux
-        - zsh
-        - zsh-completions
-        - tree
-        - watch
-        - postgresql
-        - cowsay
-      tags:
-        - brew
+      homebrew: 
+        update_homebrew: yes 
+        name: [cowsay, maven, npm, nvm, vcsh, mr, htop, wget, scala, sbt, tig, python, tmux, zsh, zsh-completions, tree, watch, postgresql]
 
       ######################### vundle ####################################
 
