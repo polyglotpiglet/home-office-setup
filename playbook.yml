@@ -6,14 +6,10 @@
        - iterm2
        - intellij-idea-ce
        - java
-       - haskell-platform
        - spectacle
        - telegram
 
   tasks:
-    - name: Enable installing specific versions of casks (eg for intellij-idea-ce rather than intellij-idea)
-      shell: brew tap caskroom/versions
-
     - name: Check for installed apps(casks)
       shell: brew cask list | grep {{ item }}
       register: installed_applications
@@ -44,8 +40,8 @@
         - zsh-completions
         - tree
         - watch
-        - couchdb
         - postgresql
+        - cowsay
       tags:
         - brew
 
@@ -74,11 +70,23 @@
         msg: "Response code from check to see if mr exists in vcsh: {{ master.rc }} "
 
     - name: Clone mr with vcsh from polyglotpiglet
-      command: vcsh clone 'git@github-personal:polyglotpiglet/mr.git' 'mr'
+      command: vcsh clone 'git@github.com:polyglotpiglet/mr.git' 'mr'
       when: master.rc == 1 
 
     - name: mr update
       command: chdir=~ mr update
+      ignore_errors: true
+
+      ######################### bashrc ####################################
+      # non-empty bashrc is prereq for scm_breeze
+      # TODO put non empty bashrc on github and install with MR above
+
+    - name: create bashrc 
+      copy:
+        dest: "~/.bashrc"
+        content: |
+          cowsay "bashrc"
+       
 
       ######################### scm_breeze ####################################
 
