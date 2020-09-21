@@ -2,7 +2,13 @@
 These are scripts to set up my local environment
 
 ### Steps
-1. Begin by running ./prereqs.sh to install homebrew and ansible
+1. Install prereqs (homebrew and ansible)
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+brew update
+brew install ansible
+```
 2. Open playbook.yml and uncomment the lines to install brew cask [TODO make this idempotent, Alexandra]
 3. Run the ansible playbook.yml by executing ./runansible.sh. 
 
